@@ -1,0 +1,27 @@
+== fine   [train T02-T08]  extra cycles (%) | PG-off domain-cycles | TP FP FN   ||  [held-out T09-11,14-16] same
+  reactive     645 (10.7%)   46071   74   3   0  ||  1128 (23.4%)   41071  153  12   0
+  w2_p0.75     636 (10.6%)   47086   66  10  10  ||  1090 (22.6%)   35504  116  31  42
+  w2_p0.9      384 ( 6.4%)   41739   41   6  35  ||   875 (18.2%)   30425   94  23  61
+  w4_p0.75     556 ( 9.3%)   45793   59   8  17  ||   881 (18.3%)   30834   91  22  64
+  w4_p0.9      313 ( 5.2%)   40693   35   4  41  ||   672 (14.0%)   26514   73  14  79
+  w8_p0.9      278 ( 4.6%)   39183   31   4  44  ||   560 (11.6%)   23654   61  13  88
+== coarse   [train T02-T08]  extra cycles (%) | PG-off domain-cycles | TP FP FN   ||  [held-out T09-11,14-16] same
+  reactive      88 ( 1.5%)    6304   10   0   0  ||   393 ( 8.2%)    5932   42   4   0
+  w2_p0.75      87 ( 1.4%)    6341    8   2   2  ||   191 ( 4.0%)    4079   18   4  25
+  w2_p0.9       87 ( 1.4%)    6341    8   2   2  ||   191 ( 4.0%)    4079   18   4  25
+  w4_p0.75      96 ( 1.6%)    6324    9   2   1  ||   193 ( 4.0%)    4323   18   4  25
+  w4_p0.9       96 ( 1.6%)    6324    9   2   1  ||   193 ( 4.0%)    4323   18   4  25
+  w8_p0.9       53 ( 0.9%)    5623    6   0   4  ||   134 ( 2.8%)    3761   14   1  29
+
+How the setting was chosen
+  Selection used the TRAINING tests only (T02-T08): the default W_NEG=2,
+  purity 0.75 is the only setting that beats reactive CG+PG on both axes
+  there (fewer extra cycles AND more power-off domain-cycles), for both
+  grains. The held-out columns (T09-T11, T14-T16; T12/T13 are forced tests)
+  were not used to choose; they show the generalisation gap: the models
+  then trade power-off time for fewer wake stalls instead of improving both.
+  Retrain on benchmark traces (ml/run_ml_train.sh) before quoting ML results.
+Columns: extra cycles = DUT - REF summed (stall cost, % of REF cycles);
+  PG-off domain-cycles = sum over power domains of cycles not ON;
+  TP/FP/FN = idle periods gated+long / gated+short / not gated+long
+  (long = idle >= 24 cycles).
